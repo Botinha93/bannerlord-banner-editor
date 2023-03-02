@@ -1,0 +1,22 @@
+﻿# Exported by TpacTool.IO
+
+s banner_background_test_11
+newmtl banner_background_test_a
+Ka 1.000 1.000 1.000
+Kd 1.000 1.000 1.000
+Ks 0.000 0.000 0.000
+usemtl banner_background_test_a
+v 12 12 0
+v -12 12 0
+v -12 -12 0
+v 12 -12 0
+vn 0 0 1
+vt 0,012936 0,99335
+vn 0 0 1
+vt 0,008539 0,99335
+vn 0 0 1
+vt 0,008539 0,988558
+vn 0 0 1
+vt 0,012936 0,988558
+f 1/1/1 2/2/2 3/3/3
+f 3/3/3 4/4/4 1/1/1

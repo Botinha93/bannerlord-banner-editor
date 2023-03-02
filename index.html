@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <link rel="stylesheet" href="style/stylemain.css">
+    <link rel="stylesheet" href="style/custom-scrollbars.css">
+    <link rel="stylesheet" href="style/imgselector.css">
+    <link rel="stylesheet" href="style/colors.css">
+    <link rel="stylesheet" href="style/slider.css">
+    <link rel="stylesheet" href="style/select.css">
+    <link rel="icon" href="icons/blicon.png">
+    <title>Banner Editor</title>
+  </head>
+  <body id="body">
+    <div id="w8screen" style="position: fixed; display:block; float: left;width: 100vw;height: 100vh;z-index: 99999; background-color: #383838ad;">
+    <div style=" border-radius: 10px; width: 400px; height: 200px; border: solid 1px #c0c0c0; background-color: #f3f3f3; margin-left: calc(50% - 200px); margin-top: calc(50vh - 100px);">
+    <style>
+    .loader {
+      border: 8px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 8px solid #3498db;
+      width: 30px;
+      height: 30px;
+      -webkit-animation: spin 2s linear infinite; /* Safari */
+      animation: spin 2s linear infinite;
+    }
+
+    /* Safari */
+    @-webkit-keyframes spin {
+      0% { -webkit-transform: rotate(0deg); }
+      100% { -webkit-transform: rotate(360deg); }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    </style>
+<img src="icons/bnicon2.png" style=" position: absolute; width: 200px; margin-top: -40px; margin-left: 100px;">
+<div class="loader" style="margin-left: calc(50% - 17px); margin-top: 110px;"></div>
+<h5 style=" width: 200px; margin-left: calc(50% - 90px); text-align: center; margin-top: 10px;">Loading banner editor ...</h5>
+</div></div>
+    <div id="imgselector" class="setdisplaynone"></div>
+    <div id="ColorPicker" class="setdisplaynone"><ul></ul></div>
+    <div id="menu">
+      <ul>
+        <li class="hastooltipe" data-toltipe="Add Image" onclick="addLayers()"><svg><image xlink:href="icons/add.svg"/></svg></li>
+        <li class="hastooltipe" data-toltipe="New Group" onclick="addGroup(event)"><svg ><image xlink:href="icons/add_group.svg"/></svg></li>
+        <li class="hastooltipe" data-toltipe="Delete" onclick="deleteLayer(event)"><svg ><image xlink:href="icons/delete.svg"/></svg></li>
+        <li class="hastooltipe" data-toltipe="Copy" onclick="copy(event)"><svg ><image xlink:href="icons/copy.svg"/></svg></li>
+      </ul>
+      <div id="overlaySelector">
+        <h5>Overlay: </h5>
+        <select onchange="overlayEvent(event)" class="select-css">
+          <option id="TESTET"><br>Banner Editor<br></option>
+          <option>Banner Vertical</option>
+          <option>Round Shield</option>
+          <option>Heater Shield</option>
+          <option>Large Shield</option>
+          <option>None</option>
+        </select>
+      </div>
+      <h5>Bannerlord text: </h5>
+      <input id="bannerlordtext"></input><button style="z-index: 999;" onclick="generateBannertext()">Generate</button>
+      <ul style="position: absolute;left: calc(100vw - 80px);">
+        <li class="hastooltipe" data-toltipe="Save project to file" onclick="savef()"><svg><image xlink:href="icons/save.svg"/></svg></li>
+        <li class="hastooltipe" data-toltipe="Load Project from file" onclick="loadf()"><svg ><image xlink:href="icons/open.svg"/></svg></li>
+      </ul>
+    </div>
+    <div id="sidebar">
+      <h4>Images/Colors</h4>
+      <div id="top">
+        <img onclick="clickIMG(event)" src="ui_bannericons/100.png" id="image" />
+        <div id="colors">
+          <div onclick="clickCOLOR(event)" class="color1 colorid0">
+            
+          </div>
+          <div onclick="clickCOLOR(event)" class="color2 colorid116">
+            
+          </div>
+        </div>
+      </div>
+      <h4>Layers</h4>
+      <div id="layers">
+        <ul id="single"></ul>
+      </div>
+    </div>
+    <div id="sidebar" class="right">
+      <h4>Image Controls</h4>
+      <div id="icontrols">
+        <div onchange="canvasChangePos(event)" class="itemFlex">X: <input type="number" id="x"></div>
+        <div onchange="canvasChangePos(event)" class="itemFlex">Y: <input type="number" id="y"></div>
+        <div onchange="canvasChangePos(event)" class="itemFlex">W: <input type="number" id="w"></div>
+        <div onchange="canvasChangePos(event)" class="itemFlex">H: <input type="number" id="h"></div>
+        <div onchange="canvasChangePos(event)" class="itemFlex">P: <input type="number" id="p"></div>
+        <div style="width: 100%;"></div>
+        <div class="switchButtom">
+          <div class="text">F.X:</div>
+            <label data-toltipe="Mirror Image" class="switch hastooltipe">
+              <input id="flipx" onchange="flip('x')" type="checkbox" >
+              <span class="switchControl round"></span>
+            </label>
+          </div>
+          <div class="switchButtom">
+          <div class="text">F.Y:</div>
+            <label data-toltipe="Adds or removes 180°" class="switch hastooltipe">
+              <input id="flipy" onchange="flip('y')" type="checkbox" >
+              <span class="switchControl round"></span>
+            </label>
+          </div>
+          <div class="switchButtom">
+          <div class="text">T.c:</div>
+            <label data-toltipe="Trace a stroke of secondary color" class="switch hastooltipe">
+              <input id="stroke" onchange="stroke()" type="checkbox" checked>
+              <span class="switchControl round"></span>
+            </label>
+          </div>
+    </div>
+      <h4>Plugins</h4>
+      <div id="plugins">
+        <ul>
+          <li><img src="icons/save.svg"/><h5>Image Parser</h5><h6>Parses images to pixel-like cubes</li>
+        </ul>
+      </div>
+    </div>
+    <div id="drawpos">
+    <canvas id="canvas" width="1528" height="1528"  style="border: 2px solid gray;"></canvas>
+    </div>
+    <script>
+      function zoomInOut(type){
+        var val = document.getElementById('myZoom').value;
+        if(type)
+          val=parseInt(val) + 1;
+        else
+          val=parseInt(val) - 1;
+        document.getElementById('myZoom').value = val;
+        zoom();
+      }
+    </script>
+    <div id="zoom"><svg ><image onclick="zoomInOut(true)" xlink:href="icons/zoom_out.svg"/></svg><input onchange="zoom()" type="range" min="1" max="99" value="28" class="slider" id="myZoom"><svg ><image onclick="zoomInOut(false)" xlink:href="icons/zoom_in.svg"/></svg><h6 id="zoomText">zoom</h6></div>
+    <script src="js.libs/fabric.js"></script>
+    <script src="js.libs/bannerlordfy.js"></script>
+    <script src="js.libs/globalEvents.js"></script>
+    <script src="js.libs/loadImages.js"></script>
+    <script src="js.libs/imgObject.js"></script>
+    <script src="js.libs/colors.js"></script>
+    <script src="js.libs/images.js"></script>
+    <script src="js.libs/canvas.js"></script>
+    <script src="js.libs/listController.js"></script>
+    <script src="js.libs/saveload.js"></script>
+    <script src="js.libs/benchmark.js"></script>
+    <script src="js.libs/overlay.js"></script>
+    <script src="./renderer.js"></script>
+    <script>
+      setTimeout(()=>{
+        document.getElementById('w8screen').style.display = "none";
+      },1000);
+      benchmark();
+    </script>
+    <div id="overlay" style="position: fixed; display:block; float: left;width: 100vw;height: 100vh;z-index: 9999; background-color: #383838ad;"></div>
+  </body>
+</html>
